@@ -3,6 +3,7 @@ import logging
 import requests
 
 from fcc4d.exceptions import (
+    ApiNotFoundException,
     ApiPermissionException,
     ApiServerError,
     ApiValueError,
@@ -11,6 +12,24 @@ from fcc4d.base.rest_client import RestClient
 
 
 logger = logging.getLogger()
+
+
+def _validate_status_code(r):
+    if r.status_code == 200:
+        return
+    elif r.status_code == 403:
+        raise ApiPermissionException()
+    elif r.status_code == 404:
+        raise ApiNotFoundException()
+    elif r.status_code == 400:
+        try:
+            errors = json.loads(r.content.decode())['errors']
+            raise ApiValueError(errors)
+        except (ValueError, KeyError):
+            # fall through to default error if error response cannot be parsed
+            pass
+
+    raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
 
 
 class ItemResource(RestClient):
@@ -56,10 +75,7 @@ class ItemResource(RestClient):
             headers=self.connection.headers,
             data=json.dumps(data),
         )
-        if r.status_code == 403:
-            raise ApiPermissionException()
-        elif r.status_code != 200:
-            raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
+        _validate_status_code(r)
 
         return r.content.decode()
 
@@ -71,10 +87,7 @@ class ItemResource(RestClient):
             auth=self.connection.auth,
             headers=self.connection.headers,
         )
-        if r.status_code == 403:
-            raise ApiPermissionException()
-        if r.status_code != 200:
-            raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
+        _validate_status_code(r)
 
         return r.content.decode()
 
@@ -99,10 +112,7 @@ class ListResource(RestClient):
             headers=self.connection.headers,
             data=instance.to_json(),
         )
-        if r.status_code == 403:
-            raise ApiPermissionException()
-        elif r.status_code != 200:
-            raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
+        _validate_status_code(r)
 
         return r.content.decode()
 
@@ -114,10 +124,7 @@ class ListResource(RestClient):
             auth=self.connection.auth,
             headers=self.connection.headers,
         )
-        if r.status_code == 403:
-            raise ApiPermissionException()
-        elif r.status_code != 200:
-            raise ApiServerError("Unexpected response from server")
+        _validate_status_code(r)
 
         try:
             data = json.loads(r.content.decode())
@@ -138,10 +145,7 @@ class ListResource(RestClient):
                 'filter': filter,
             },
         )
-        if r.status_code == 403:
-            raise ApiPermissionException()
-        elif r.status_code != 200:
-            raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
+        _validate_status_code(r)
 
         try:
             data = json.loads(r.content.decode())["items"]
