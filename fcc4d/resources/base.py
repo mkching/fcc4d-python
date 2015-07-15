@@ -114,7 +114,8 @@ class ListResource(RestClient):
         )
         _validate_status_code(r)
 
-        return r.content.decode()
+        ser = json.loads(r.content.decode())
+        return self.item_resource(self.connection, ser)
 
     def get(self, sid):
         url = '{0}/{1}/{2}'.format(self.connection.base_url, self.endpoint_path, sid)
