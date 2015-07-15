@@ -4,6 +4,10 @@ class FCC4DException(Exception):
         self.message = message
 
 
+class ApiNotFoundException(FCC4DException):
+    pass
+
+
 class ApiPermissionException(FCC4DException):
     pass
 
