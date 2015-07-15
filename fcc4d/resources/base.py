@@ -21,6 +21,9 @@ class ItemResource(RestClient):
         buf = '{0}({1})'.format(self.__class__.__name__, ", ".join(fields))
         return buf
 
+    def __repr__(self):
+        return str(self)
+
     @classmethod
     def from_dict(cls, data):
         o = cls(None)
