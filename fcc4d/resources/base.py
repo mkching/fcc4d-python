@@ -136,7 +136,7 @@ class ListResource(RestClient):
         if r.status_code == 403:
             raise ApiPermissionException()
         elif r.status_code != 200:
-            raise ApiServerError("Unexpected response from server")
+            raise ApiServerError("Unexpected response from server: {0}: {1}".format(r.status_code, r.content))
 
         try:
             data = json.loads(r.content.decode())["items"]
