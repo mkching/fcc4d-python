@@ -19,7 +19,7 @@ class FCC4DClient(RestClient):
         self.dids = Dids(self.connection)
         self.endpoints = Endpoints(self.connection)
         self.trunks = Trunks(self.connection)
-        self.trunkrgroups = Trunkgroups(self.connection)
+        self.trunkgroups = Trunkgroups(self.connection)
         self.countries = Countries(self.connection)
         self.sms = Sms(self.connection)
         self.push = Push(self.connection)
