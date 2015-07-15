@@ -95,8 +95,35 @@ class ItemResource(RestClient):
 class ListResource(RestClient):
     LIST_LIMIT = 999999
 
+    _account_sid_cache = None
+
+    # helper method to retrieve accountSid used by some POST endpoints
+    def _get_account_sid(self):
+        if self._account_sid_cache:
+            return self._account_sid_cache
+
+        url = '{0}/{1}'.format(self.connection.base_url, 'accounts')
+        r = requests.get(
+            url=url,
+            auth=self.connection.auth,
+            headers=self.connection.headers,
+        )
+        _validate_status_code(r)
+
+        try:
+            data = json.loads(r.content.decode())
+            self._account_sid_cache = data['items'][0]['accountSid']
+            return self._account_sid_cache
+        except ValueError:
+            raise ApiServerError("Unparseable response from server: {0}: {1}".format(r.status_code, r.content))
+        except KeyError:
+            raise ApiServerError("Unexpected response from server: {0}".format(data))
+
     def create(self, **data):
-        url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
+        if getattr(self, 'create_with_account_sid', False):
+            url = '{0}/{1}/{2}'.format(self.connection.base_url, self.endpoint_path, self._get_account_sid())
+        else:
+            url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
 
         for k in data.keys():
             if k not in self.item_resource.create_fields:
