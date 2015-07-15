@@ -1,4 +1,5 @@
 import json
+import logging
 import requests
 
 from fcc4d.exceptions import (
@@ -7,6 +8,9 @@ from fcc4d.exceptions import (
     ApiValueError,
 )
 from fcc4d.base.rest_client import RestClient
+
+
+logger = logging.getLogger()
 
 
 class ItemResource(RestClient):
@@ -88,6 +92,7 @@ class ListResource(RestClient):
 
         instance = self.item_resource.from_dict(data)
 
+        logger.debug("POST {0}: {1}: {2!r}".format(url, data, instance))
         r = requests.post(
             url=url,
             auth=self.connection.auth,
