@@ -32,12 +32,14 @@ class FCC4DAdminTestCase(unittest.TestCase):
 
 
 class FCC4DUserTestCase(unittest.TestCase):
-    # represents the sid of the test user
-    user_account_sid = config['user_account_sid']
-    # another valid sid in the system, but that the test user has no access to
-    other_account_sid = config['other_account_sid']
-
+   
     def setUp(self):
+        # test class expects to be configured with an account that has an object of each of the api endpoints
+        # there should also be valid sid for resources which it does have have access to
+        for k in ('account', 'did', 'endpoint', 'trunk', 'trunkgroup'):
+            setattr(self, 'user_{0}_sid'.format(k), config['user_{0}_sid'.format(k)])
+            setattr(self, 'other_{0}_sid'.format(k), config['other_{0}_sid'.format(k)])
+
         self.c = FCC4DClient(
             username=config['user_username'],
             password=config['user_password'],
