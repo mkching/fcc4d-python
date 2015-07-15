@@ -7,6 +7,15 @@ import unittest
 
 from fcc4d.client import FCC4DClient
 
+import requests
+import http.client as http_client
+import logging
+
+logging.basicConfig() 
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
 
 config_filename = os.path.dirname(__file__) + '/config.json'
 with open(config_filename) as data_file:
