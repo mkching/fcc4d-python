@@ -36,11 +36,11 @@ class ItemResource(RestClient):
     def __init__(self, connection, data=None):
         super().__init__(connection)
         if data:
-            for k in self.retrieve_fields:
-                setattr(self, k, data[k])
+            for k in self.fields:
+                setattr(self, k, data.get(k))
 
     def __str__(self):
-        fields = ['{0}={1!r}'.format(x, getattr(self, x)) for x in self.fields if getattr(self, x, None)]
+        fields = ['{0}={1!r}'.format(x, getattr(self, x)) for x in self.fields if getattr(self, x, None) is not None]
         buf = '{0}({1})'.format(self.__class__.__name__, ", ".join(fields))
         return buf
 
@@ -58,7 +58,7 @@ class ItemResource(RestClient):
         data = {}
         for k in self.fields:
             v = getattr(self, k, None)
-            if v:
+            if v is not None:
                 data[k] = v
         return json.dumps(data)
 
