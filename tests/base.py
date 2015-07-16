@@ -11,7 +11,7 @@ import requests
 import http.client as http_client
 import logging
 
-logging.basicConfig() 
+logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
@@ -32,11 +32,11 @@ class FCC4DAdminTestCase(unittest.TestCase):
 
 
 class FCC4DUserTestCase(unittest.TestCase):
-   
+
     def setUp(self):
         # test class expects to be configured with an account that has an object of each of the api endpoints
         # there should also be valid sid for resources which it does have have access to
-        for k in ('account', 'did', 'endpoint', 'trunk', 'trunkgroup'):
+        for k in ('account', 'did', 'endpoint', 'trunk', 'trunk2', 'trunkgroup'):
             setattr(self, 'user_{0}_sid'.format(k), config['user_{0}_sid'.format(k)])
             setattr(self, 'other_{0}_sid'.format(k), config['other_{0}_sid'.format(k)])
 
