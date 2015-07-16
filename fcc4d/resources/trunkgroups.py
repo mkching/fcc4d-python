@@ -27,4 +27,3 @@ class Trunkgroup(ItemResource):
 class Trunkgroups(ListResource):
     endpoint_path = 'trunkGroups'
     item_resource = Trunkgroup
-    create_with_account_sid = True
