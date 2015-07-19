@@ -2,6 +2,9 @@ from fcc4d.resources.base import ItemResource, ListResource
 
 
 class Account(ItemResource):
+    ROLE_ADMIN = 0
+    ROLE_USER = 1
+
     endpoint_path = 'accounts'
     create_fields = (
         'name',
