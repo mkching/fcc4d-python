@@ -32,7 +32,7 @@ class TrunkgroupTest(FCC4DUserTestCase):
     def test_create(self):
         result = self.c.trunkgroups.create(
             name="unittest test trunkgroup",
-            type=Trunkgroup.TYPE_FAILOVER,
+            typeId=Trunkgroup.TYPE_FAILOVER,
         )
         verify = self.c.trunkgroups.get(result.trunkGroupSid)
         self.assertEqual(repr(result), repr(verify))
@@ -43,20 +43,20 @@ class TrunkgroupTest(FCC4DUserTestCase):
         o = self._get_trunkgroup()
         self.assertNotEqual(o.name, value)
 
-        o.update(name=value, type=Trunkgroup.TYPE_FAILOVER)
+        o.update(name=value, typeId=Trunkgroup.TYPE_FAILOVER)
         o = self._get_trunkgroup()
         self.assertEqual(o.name, value)
-        self.assertEqual(o.type, Trunkgroup.TYPE_FAILOVER)
+        self.assertEqual(o.typeId, Trunkgroup.TYPE_FAILOVER)
 
-        o.update(type=Trunkgroup.TYPE_LOADBALANCE)
+        o.update(typeId=Trunkgroup.TYPE_LOADBALANCE)
         o = self._get_trunkgroup()
         self.assertEqual(o.name, value)
-        self.assertEqual(o.type, Trunkgroup.TYPE_LOADBALANCE)
+        self.assertEqual(o.typeId, Trunkgroup.TYPE_LOADBALANCE)
 
     def _test_update_other(self):
         o = self._get_trunkgroup()
         o.trunkGroupSid = self.other_trunkgroup_sid
-        o.update(type=Trunkgroup.TYPE_FAILOVER)
+        o.update(typeId=Trunkgroup.TYPE_FAILOVER)
 
     def test_update_other(self):
         self.assertRaises(ApiPermissionException, self._test_update_other)
@@ -64,7 +64,7 @@ class TrunkgroupTest(FCC4DUserTestCase):
     def test_delete(self):
         created = self.c.trunkgroups.create(
             name="unittest test trunkgroup",
-            type=Trunkgroup.TYPE_FAILOVER,
+            typeId=Trunkgroup.TYPE_FAILOVER,
         )
         verify = self.c.trunkgroups.get(created.trunkGroupSid)
         self.assertEqual(repr(created), repr(verify))

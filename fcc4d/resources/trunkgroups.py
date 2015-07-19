@@ -8,17 +8,17 @@ class Trunkgroup(ItemResource):
     endpoint_path = 'trunkGroups'
     create_fields = (
         'name',
-        'type',
+        'typeId',
     )
     retrieve_fields = (
         'trunkGroupSid',
         'accountSid',
         'name',
-        'type',
+        'typeId',
     )
     update_fields = (
         'name',
-        'type',
+        'typeId',
     )
     fields = set(create_fields) | set(retrieve_fields) | set(update_fields)
     sid_field = 'trunkGroupSid'
