@@ -24,6 +24,8 @@ with open(config_filename) as data_file:
 
 class FCC4DAdminTestCase(unittest.TestCase):
     def setUp(self):
+        self.maxDiff = None
+
         self.c = FCC4DClient(
             username=config['admin_username'],
             password=config['admin_password'],
@@ -34,6 +36,8 @@ class FCC4DAdminTestCase(unittest.TestCase):
 class FCC4DUserTestCase(unittest.TestCase):
 
     def setUp(self):
+        self.maxDiff = None
+
         # test class expects to be configured with an account that has an object of each of the api endpoints
         # there should also be valid sid for resources which it does have have access to
         for k in ('account', 'did', 'endpoint', 'trunk', 'trunk2', 'trunkgroup'):
