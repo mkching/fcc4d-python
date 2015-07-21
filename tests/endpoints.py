@@ -7,6 +7,7 @@ import uuid
 from fcc4d.exceptions import (
     ApiNotFoundException,
     ApiPermissionException,
+    ApiValueError,
 )
 from fcc4d.resources import (
     Endpoint,
@@ -19,8 +20,8 @@ class EndpointTest(FCC4DUserTestCase):
     def setUp(self):
         super().setUp()
 
-        for o in self.c.trunkgroups.list(filter='name eq "unittest test trunkgroup"'):
-            if o.name == "unittest test trunkgroup":
+        for o in self.c.endpoints.list(filter='name eq "unittest test endpoint"'):
+            if o.name == "unittest test endpoint":
                 o.delete()
 
     def _get_endpoint(self):
@@ -33,19 +34,27 @@ class EndpointTest(FCC4DUserTestCase):
         # this request caused an error condition during development
         # keep this test to watch for regressions
 
-        result = self.c.endpoints.create(
-            name="unittest test endpoint",
-            typeId=Endpoint.TYPE_OTHER,
-            addresses=[{"tag": "unittest test endpoint tag", "ip": "10.254.254.254:5061"}],
-        )
-        verify = self.c.endpoints.get(result.endpointSid)
-        self.assertEqual(repr(result), repr(verify))
+        args = {
+            'name': "unittest test endpoint",
+            'typeId': Endpoint.TYPE_OTHER,
+            'addresses': [{"tag": "unittest test endpoint tag", "ip": "10.250.250.250:5061"}],
+        }
+        _fail = lambda: self.c.endpoints.create(**args)
+        self.assertRaises(ApiValueError, _fail)
 
     def test_create(self):
         result = self.c.endpoints.create(
             name="unittest test endpoint",
             typeId=Endpoint.TYPE_OTHER,
-            addresses=[{"tag": "unittest test endpoint tag", "ip": "10.254.254.254"}],
+            addresses=[{"tag": "unittest test endpoint tag", "ip": "10.250.250.250"}],
+        )
+        verify = self.c.endpoints.get(result.endpointSid)
+        self.assertEqual(repr(result), repr(verify))
+
+        result = self.c.endpoints.create(
+            name="unittest test endpoint",
+            typeId=Endpoint.TYPE_OTHER,
+            addresses=[{"tag": "unittest test endpoint tag", "ip": "10.251.251.251", "port": "5061"}],
         )
         verify = self.c.endpoints.get(result.endpointSid)
         self.assertEqual(repr(result), repr(verify))
