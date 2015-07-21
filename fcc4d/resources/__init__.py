@@ -1,7 +1,7 @@
 from fcc4d.resources.accounts import Account, Accounts
 from fcc4d.resources.dids import Dids
 from fcc4d.resources.endpoints import Endpoint, Endpoints
-from fcc4d.resources.trunks import Trunks
+from fcc4d.resources.trunks import Trunk, Trunks
 from fcc4d.resources.trunkgroups import Trunkgroup, Trunkgroups
 from fcc4d.resources.countries import Countries
 from fcc4d.resources.sms import Sms
