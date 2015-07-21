@@ -14,11 +14,11 @@ from base import FCC4DAdminTestCase
 
 class AccountsTest(FCC4DAdminTestCase):
     def setUp(self):
-         super().setUp()
+        super().setUp()
 
-         for o in self.c.accounts.list(filter='login like "wv-unittest%"'):
-             if o.login.startswith("wv-unittest"):
-                 o.delete()
+        for o in self.c.accounts.list(filter='login like "wv-unittest%"'):
+            if o.login.startswith("wv-unittest"):
+                o.delete()
 
     def _create_account(self, username, password, name=None):
         return self.c.accounts.create(
@@ -60,7 +60,6 @@ class AccountsTest(FCC4DAdminTestCase):
         )
         self._auth_check(username, password, 401)
         self._auth_check(username, password2)
-
 
     def test_delete(self):
         username = 'wv-unittest1'
