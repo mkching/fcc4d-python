@@ -2,6 +2,7 @@ from fcc4d.base.rest_client import RestClient, RestConnection
 from fcc4d.resources import (
     Accounts,
     Dids,
+    DidsInventory,
     Endpoints,
     Trunks,
     Trunkgroups,
@@ -17,6 +18,7 @@ class FCC4DClient(RestClient):
 
         self.accounts = Accounts(self.connection)
         self.dids = Dids(self.connection)
+        self.dids_inventory = DidsInventory(self.connection)
         self.endpoints = Endpoints(self.connection)
         self.trunks = Trunks(self.connection)
         self.trunkgroups = Trunkgroups(self.connection)

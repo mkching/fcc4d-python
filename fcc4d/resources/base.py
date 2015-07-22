@@ -98,12 +98,15 @@ class ListResource(RestClient):
     def create(self, **data):
         url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
 
-        for k in data.keys():
-            if k not in self.item_resource.create_fields:
-                raise ApiValueError("Field {0} not allowed in create, must be in {1}".format(
-                    k, self.item_resource.create_fields))
+        if data.get('instance'):
+            instance = data['instance']
+        else:
+            for k in data.keys():
+                if k not in self.item_resource.create_fields:
+                    raise ApiValueError("Field {0} not allowed in create, must be in {1}".format(
+                        k, self.item_resource.create_fields))
 
-        instance = self.item_resource.from_dict(data)
+            instance = self.item_resource.from_dict(data)
 
         logger.debug("POST {0}: {1}: {2!r}".format(url, data, instance))
         r = requests.post(
@@ -134,7 +137,14 @@ class ListResource(RestClient):
         else:
             return self.item_resource(self.connection, data)
 
-    def list(self, filter=None):
+    def list(self, filter=None, offset=None, limit=None):
+        if offset is None:
+            offset = 0
+        if limit is None:
+            limit = self.LIST_LIMIT
+        else:
+            limit = min(limit, self.LIST_LIMIT)
+
         url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
 
         r = requests.get(
@@ -142,7 +152,8 @@ class ListResource(RestClient):
             auth=self.connection.auth,
             headers=self.connection.headers,
             params={
-                'limit': self.LIST_LIMIT,
+                'offset': offset,
+                'limit': limit,
                 'filter': filter,
             },
         )
