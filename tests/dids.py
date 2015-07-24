@@ -80,8 +80,8 @@ class DidsTest(FCC4DUserTestCase):
 
         rs = self.c.dids.list()
         self.assertGreaterEqual(len(rs), 1)
-        self.assertIsInstance(rs[0], Did)
-        self.assertEqual(repr(rs[0]), repr(wanted))
+        self.assertTrue(all([isinstance(x, Did) for x in rs]))
+        self.assertTrue(any([repr(x) == repr(wanted) for x in rs]))
 
     def test_list_filter(self):
         wanted = self._get_did()
