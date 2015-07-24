@@ -93,7 +93,7 @@ class ItemResource(RestClient):
 
 
 class ListResource(RestClient):
-    LIST_LIMIT = 999999
+    LIST_LIMIT = 1000
 
     def create(self, **data):
         url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
