@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from fcc4d.resources.base import ItemResource, ListResource
 
 
@@ -35,6 +37,9 @@ class Endpoint(ItemResource):
     fields = set(create_fields) | set(retrieve_fields) | set(update_fields)
     sid_field = 'endpointSid'
 
+    def clean(self):
+        super().clean()
+        self.addresses = sorted(self.addresses, key=itemgetter('tag'))
 
 class Endpoints(ListResource):
     endpoint_path = 'endpoints'

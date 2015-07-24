@@ -38,6 +38,7 @@ class ItemResource(RestClient):
         if data:
             for k in self.fields:
                 setattr(self, k, data.get(k))
+            self.clean()
 
     def __str__(self):
         fields = ['{0}={1!r}'.format(x, getattr(self, x)) for x in self.fields if getattr(self, x, None) is not None]
@@ -52,6 +53,7 @@ class ItemResource(RestClient):
         o = cls(None)
         for k in cls.fields:
             setattr(o, k, data.get(k))
+        o.clean()
         return o
 
     def to_json(self):
@@ -61,6 +63,9 @@ class ItemResource(RestClient):
             if v is not None:
                 data[k] = v
         return json.dumps(data)
+
+    def clean(self):
+        return
 
     def update(self, **data):
         url = '{0}/{1}/{2}'.format(self.connection.base_url, self.endpoint_path, getattr(self, self.sid_field))
