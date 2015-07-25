@@ -125,3 +125,23 @@ class EndpointTest(FCC4DUserTestCase):
     def test_list_filter_other(self):
         rs = self.c.endpoints.list(filter='endpointSid eq "{0}"'.format(self.other_endpoint_sid))
         self.assertEqual(len(rs), 0)
+
+    def test_getattr(self):
+        o = Endpoint.from_dict({
+            'addresses': [],
+            'attributes': [
+                {
+                    'key': 'test1',
+                    'value': 'test2',
+                },
+                {
+                    'key': 'test3',
+                    'value': 'test4',
+                },
+            ]
+        })
+        self.assertEqual(o.getattr('test1'), 'test2')
+        self.assertEqual(o.getattr('test3'), 'test4')
+        self.assertEqual(o.getattr('none'), None)
+        self.assertEqual(o.getattr('none', 'test5'), 'test5')
+                    

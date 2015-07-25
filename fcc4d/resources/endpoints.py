@@ -41,6 +41,12 @@ class Endpoint(ItemResource):
         super().clean()
         self.addresses = sorted(self.addresses, key=itemgetter('tag'))
 
+    def getattr(self, name, default=None):
+        for x in self.attributes:
+            if x['key'] == name:
+                return x['value']
+        return default
+
 class Endpoints(ListResource):
     endpoint_path = 'endpoints'
     item_resource = Endpoint
