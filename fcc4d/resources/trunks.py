@@ -7,6 +7,11 @@ class Trunk(ItemResource):
     IN_CAPACITY_UNLIMITED = 0
     OUT_CAPACITY_UNLIMITED = 0
 
+    PROTOCOL_ID_MAP = {
+        1: 'udp',
+        2: 'tcp',
+    }
+
     endpoint_path = 'trunks'
     create_fields = (
         'name',
@@ -42,6 +47,9 @@ class Trunk(ItemResource):
     fields = set(create_fields) | set(retrieve_fields) | set(update_fields)
     sid_field = 'trunkSid'
 
+    @property
+    def protocol(self):
+        return Trunk.PROTOCOL_ID_MAP.get(self.protocolId, None)
 
 class Trunks(ListResource):
     endpoint_path = 'trunks'

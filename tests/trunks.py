@@ -102,3 +102,10 @@ class TrunkTest(FCC4DUserTestCase):
     def test_list_filter_other(self):
         rs = self.c.trunks.list(filter='trunkSid eq "{0}"'.format(self.other_trunkgroup_sid))
         self.assertEqual(len(rs), 0)
+
+    def test_property(self):
+        o = Trunk.from_dict({})
+        o.protocolId = Trunk.PROTOCOL_UDP
+        self.assertEqual(o.protocol, 'udp')
+        o.protocolId = Trunk.PROTOCOL_TCP
+        self.assertEqual(o.protocol, 'tcp')
