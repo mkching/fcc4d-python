@@ -3,6 +3,7 @@ import logging
 import requests
 
 from fcc4d.exceptions import (
+    ApiMultipleFoundException,
     ApiNotFoundException,
     ApiPermissionException,
     ApiServerError,
@@ -126,6 +127,9 @@ class ListResource(RestClient):
         return self.item_resource(self.connection, ser)
 
     def get(self, sid):
+        # GET method does not properly filter by sid, so we implement our own copy using filters here
+
+        """
         url = '{0}/{1}/{2}'.format(self.connection.base_url, self.endpoint_path, sid)
 
         r = requests.get(
@@ -141,6 +145,32 @@ class ListResource(RestClient):
             raise ApiServerError("Unparseable response from server: {0}: {1}".format(r.status_code, r.content))
         else:
             return self.item_resource(self.connection, data)
+        """
+
+        url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
+        r = requests.get(
+            url=url,
+            auth=self.connection.auth,
+            headers=self.connection.headers,
+            params={
+                'offset': 0,
+                'limit': 1,
+                'filter': '{0} eq "{1}"'.format(self.item_resource.sid_field, sid),
+            }
+        )
+        _validate_status_code(r)
+
+        try:
+            data = json.loads(r.content.decode())["items"]
+        except ValueError:
+            raise ApiServerError("Unparseable response from server: {0}: {1}".format(r.status_code, r.content))
+        else:
+            if len(data) == 0:
+                raise ApiNotFoundException()
+            elif len(data) > 1:
+                raise ApiMultipleFoundException()
+            else:
+                return self.item_resource(self.connection, data[0])
 
     def list(self, filter=None, offset=None, limit=None):
         if offset is None:
