@@ -7,9 +7,15 @@ class Trunk(ItemResource):
     IN_CAPACITY_UNLIMITED = 0
     OUT_CAPACITY_UNLIMITED = 0
 
+    PROTOCOL_MAP = {
+        'udp': PROTOCOL_UDP,
+        'UDP': PROTOCOL_UDP,
+        'tcp': PROTOCOL_TCP,
+        'TCP': PROTOCOL_TCP,
+    }
     PROTOCOL_ID_MAP = {
-        1: 'udp',
-        2: 'tcp',
+        PROTOCOL_UDP: 'udp',
+        PROTOCOL_TCP: 'tcp',
     }
 
     endpoint_path = 'trunks'
