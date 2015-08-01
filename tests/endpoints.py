@@ -106,6 +106,10 @@ class EndpointTest(FCC4DUserTestCase):
         self.assertIsInstance(o, Endpoint)
         self.assertEqual(o.endpointSid, self.user_endpoint_sid)
 
+    def test_exists(self):
+        self.assertTrue(self.c.endpoints.exists(filter='endpointSid eq "{0}"'.format(self.user_endpoint_sid)))
+        self.assertFalse(self.c.endpoints.exists(filter='endpointSid eq "{0}"'.format(self.other_endpoint_sid)))
+
     def test_list_all(self):
         wanted = self._get_endpoint()
 
@@ -144,4 +148,3 @@ class EndpointTest(FCC4DUserTestCase):
         self.assertEqual(o.getattr('test3'), 'test4')
         self.assertEqual(o.getattr('none'), None)
         self.assertEqual(o.getattr('none', 'test5'), 'test5')
-                    

@@ -75,6 +75,10 @@ class DidsTest(FCC4DUserTestCase):
         self.assertIsInstance(o, Did)
         self.assertEqual(o.didSid, self.user_did_sid)
 
+    def test_exists(self):
+        self.assertTrue(self.c.dids.exists(filter='didSid eq "{0}"'.format(self.user_did_sid)))
+        self.assertFalse(self.c.dids.exists(filter='didSid eq "{0}"'.format(self.other_did_sid)))
+
     def test_list_all(self):
         wanted = self._get_did()
 

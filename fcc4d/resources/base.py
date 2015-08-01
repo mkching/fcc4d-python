@@ -172,6 +172,29 @@ class ListResource(RestClient):
             else:
                 return self.item_resource(self.connection, data[0])
 
+    def exists(self, filter=None):
+        url = '{0}/{1}'.format(self.connection.base_url, self.endpoint_path)
+
+        r = requests.get(
+            url=url,
+            auth=self.connection.auth,
+            headers=self.connection.headers,
+            params={
+                'offset': 0,
+                'limit': 1,
+                'includeFields': self.item_resource.sid_field,
+                'filter': filter,
+            },
+        )
+        _validate_status_code(r)
+
+        try:
+            data = json.loads(r.content.decode())["total"]
+        except ValueError:
+            raise ApiServerError("Unparseable response from server: {0}: {1}".format(r.status_code, r.content))
+        else:
+            return data > 0
+
     def list(self, filter=None, offset=None, limit=None):
         if offset is None:
             offset = 0

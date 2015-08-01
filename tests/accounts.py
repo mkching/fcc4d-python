@@ -74,6 +74,10 @@ class AccountsTest(FCC4DUserTestCase):
         self.assertIsInstance(a, Account)
         self.assertEqual(a.accountSid, self.user_account_sid)
 
+    def test_exists(self):
+        self.assertTrue(self.c.accounts.exists(filter='accountSid eq "{0}"'.format(self.user_account_sid)))
+        self.assertFalse(self.c.accounts.exists(filter='accountSid eq "{0}"'.format(self.other_account_sid)))
+
     def test_list_all(self):
         wanted = self._get_account()
 

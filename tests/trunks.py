@@ -83,6 +83,10 @@ class TrunkTest(FCC4DUserTestCase):
         self.assertIsInstance(o, Trunk)
         self.assertEqual(o.trunkSid, self.user_trunk_sid)
 
+    def test_exists(self):
+        self.assertTrue(self.c.trunks.exists(filter='trunkSid eq "{0}"'.format(self.user_trunk_sid)))
+        self.assertFalse(self.c.trunks.exists(filter='trunkSid eq "{0}"'.format(self.other_trunk_sid)))
+
     def test_list_all(self):
         wanted = self._get_trunk()
 

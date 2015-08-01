@@ -84,6 +84,10 @@ class TrunkgroupTest(FCC4DUserTestCase):
         self.assertIsInstance(o, Trunkgroup)
         self.assertEqual(o.trunkGroupSid, self.user_trunkgroup_sid)
 
+    def test_exists(self):
+        self.assertTrue(self.c.trunkgroups.exists(filter='trunkGroupSid eq "{0}"'.format(self.user_trunkgroup_sid)))
+        self.assertFalse(self.c.trunkgroups.exists(filter='trunkGroupSid eq "{0}"'.format(self.other_trunkgroup_sid))) 
+
     def test_list_all(self):
         wanted = self._get_trunkgroup()
 
