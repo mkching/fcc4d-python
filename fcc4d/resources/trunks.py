@@ -32,6 +32,7 @@ class Trunk(ItemResource):
     retrieve_fields = (
         'trunkSid',
         'name',
+        'accountSid',
         'endpointSid',
         'endpointAddressTag',
         'trunkGroupSid',
